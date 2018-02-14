@@ -73,8 +73,6 @@ namespace Server.Domain
       }
     }
     private ScoreBoard _scoreBoard;
-    private int _redOwnershipDeciseconds;
-    private int _blueOwnershipDeciseconds;
     private int _redSwitchOwnershipDeciseconds;
     private int _redScaleOwnershipDeciseconds;
     private int _blueSwitchOwnershipDeciseconds;
@@ -89,28 +87,6 @@ namespace Server.Domain
         _elapsedDeciseconds = value;
         if (_scoreBoard != null)
           _scoreBoard.ElapsedDeciseconds = _elapsedDeciseconds;
-      }
-    }
-
-    private int RedOwnershipDeciseconds
-    {
-      get { return _redOwnershipDeciseconds; }
-      set
-      {
-        _redOwnershipDeciseconds = value;
-        if (_scoreBoard != null)
-          _scoreBoard.RedOwnershipDeciseconds = _redOwnershipDeciseconds;
-      }
-    }
-
-    private int BlueOwnershipDeciseconds
-    {
-      get { return _blueOwnershipDeciseconds; }
-      set
-      {
-        _blueOwnershipDeciseconds = value;
-        if (_scoreBoard != null)
-          _scoreBoard.BlueOwnershipDeciseconds = _blueOwnershipDeciseconds;
       }
     }
 
@@ -376,8 +352,6 @@ namespace Server.Domain
 
     private void ZeroScore()
     {
-      RedOwnershipDeciseconds = 0;
-      BlueOwnershipDeciseconds = 0;
       RedSwitchOwnershipDeciseconds = 0;
       RedScaleOwnershipDeciseconds = 0;
       BlueSwitchOwnershipDeciseconds = 0;
@@ -390,12 +364,10 @@ namespace Server.Domain
       if (_scoreBoard.StateOfPlay == StateOfPlayEnum.AUTONOMOUS)
       {
         RedSwitchOwnershipDeciseconds += 20;
-        RedOwnershipDeciseconds += 20;
       }
       else
       {
         RedSwitchOwnershipDeciseconds += 10;
-        RedOwnershipDeciseconds += 10;
       }
     }
 
@@ -408,12 +380,10 @@ namespace Server.Domain
       if (_scoreBoard.StateOfPlay == StateOfPlayEnum.AUTONOMOUS)
       {
         BlueSwitchOwnershipDeciseconds += 20;
-        BlueOwnershipDeciseconds += 20;
       }
       else
       {
         BlueSwitchOwnershipDeciseconds += 10;
-        BlueOwnershipDeciseconds += 10;
       }
     }
 
@@ -426,12 +396,10 @@ namespace Server.Domain
       if (_scoreBoard.StateOfPlay == StateOfPlayEnum.AUTONOMOUS)
       {
         RedScaleOwnershipDeciseconds += 20;
-        RedOwnershipDeciseconds += 20;
       }
       else
       {
         RedScaleOwnershipDeciseconds += 10;
-        RedOwnershipDeciseconds += 10;
       }
     }
 
@@ -444,12 +412,10 @@ namespace Server.Domain
       if (_scoreBoard.StateOfPlay == StateOfPlayEnum.AUTONOMOUS)
       {
         BlueScaleOwnershipDeciseconds += 20;
-        BlueOwnershipDeciseconds += 20;
       }
       else
       {
         BlueScaleOwnershipDeciseconds += 10;
-        BlueOwnershipDeciseconds += 10;
       }
     }
 
@@ -568,12 +534,10 @@ namespace Server.Domain
           if (_scoreBoard.StateOfPlay == StateOfPlayEnum.AUTONOMOUS)
           {
             BlueSwitchOwnershipDeciseconds += 2;
-            BlueOwnershipDeciseconds += 2;
           }
           else
           {
             BlueSwitchOwnershipDeciseconds += 1;
-            BlueOwnershipDeciseconds += 1;
           }
         }
       }
@@ -584,12 +548,10 @@ namespace Server.Domain
           if (_scoreBoard.StateOfPlay == StateOfPlayEnum.AUTONOMOUS)
           {
             RedSwitchOwnershipDeciseconds += 2;
-            RedOwnershipDeciseconds += 2;
           }
           else
           {
             RedSwitchOwnershipDeciseconds += 1;
-            RedOwnershipDeciseconds += 1;              
           }
         }
       }
@@ -600,12 +562,10 @@ namespace Server.Domain
           if (_scoreBoard.StateOfPlay == StateOfPlayEnum.AUTONOMOUS)
           {
             RedScaleOwnershipDeciseconds += 2;
-            RedOwnershipDeciseconds += 2;              
           }
           else
           {
             RedScaleOwnershipDeciseconds += 1;
-            RedOwnershipDeciseconds += 1;              
           }
         }
         if (Field.Scale.IsBlueOwned)
@@ -613,12 +573,10 @@ namespace Server.Domain
           if (_scoreBoard.StateOfPlay == StateOfPlayEnum.AUTONOMOUS)
           {
             BlueScaleOwnershipDeciseconds += 2;
-            BlueOwnershipDeciseconds += 2;              
           } 
           else
           {
             BlueScaleOwnershipDeciseconds += 1;
-            BlueOwnershipDeciseconds += 1;              
           }         
         }
       }

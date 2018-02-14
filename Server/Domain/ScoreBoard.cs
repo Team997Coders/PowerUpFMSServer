@@ -52,8 +52,6 @@ namespace Server.Domain
   public class ScoreBoard
   {
     private int _elapsedDeciseconds;
-    private int _redOwnershipDeciseconds;
-    private int _blueOwnershipDeciseconds;
     private int _redSwitchOwnershipDeciseconds;
     private int _redScaleOwnershipDeciseconds;
     private int _blueSwitchOwnershipDeciseconds;
@@ -92,45 +90,33 @@ namespace Server.Domain
       }
     }
 
-    public int RedOwnershipDeciseconds
-    { 
-      get
+    private void SumBlueOwnershipSeconds()
+    {
+      int tempSeconds = 
+        Convert.ToInt32(_blueSwitchOwnershipDeciseconds * 0.1) 
+        + Convert.ToInt32(_blueScaleOwnershipDeciseconds * 0.1);
+      if (tempSeconds != _blueOwnershipSeconds)
       {
-        return _redOwnershipDeciseconds;
-      }
-      set
-      {
-        _redOwnershipDeciseconds = value;
-        int tempSeconds = Convert.ToInt32(_redOwnershipDeciseconds * 0.1);
-        if (tempSeconds != _redOwnershipSeconds)
-        {
-          _redOwnershipSeconds = tempSeconds;
-          RedOwnershipSecondsUpdatedEventArgs e = new RedOwnershipSecondsUpdatedEventArgs {
-            RedOwnershipSeconds = _redOwnershipSeconds
-          };
-          OnRedOwnershipSecondsUpdated(e);
-        }
+        _blueOwnershipSeconds = tempSeconds;
+        BlueOwnershipSecondsUpdatedEventArgs e = new BlueOwnershipSecondsUpdatedEventArgs {
+          BlueOwnershipSeconds = _blueOwnershipSeconds
+        };
+        OnBlueOwnershipSecondsUpdated(e);
       }
     }
 
-    public int BlueOwnershipDeciseconds
-    { 
-      get
+    private void SumRedOwnershipSeconds()
+    {
+      int tempSeconds = 
+        Convert.ToInt32(_redSwitchOwnershipDeciseconds * 0.1) 
+        + Convert.ToInt32(_redScaleOwnershipDeciseconds * 0.1);
+      if (tempSeconds != _redOwnershipSeconds)
       {
-        return _blueOwnershipDeciseconds;
-      }
-      set
-      {
-        _blueOwnershipDeciseconds = value;
-        int tempSeconds = Convert.ToInt32(_blueOwnershipDeciseconds * 0.1);
-        if (tempSeconds != _blueOwnershipSeconds)
-        {
-          _blueOwnershipSeconds = tempSeconds;
-          BlueOwnershipSecondsUpdatedEventArgs e = new BlueOwnershipSecondsUpdatedEventArgs {
-            BlueOwnershipSeconds = _blueOwnershipSeconds
-          };
-          OnBlueOwnershipSecondsUpdated(e);
-        }
+        _redOwnershipSeconds = tempSeconds;
+        RedOwnershipSecondsUpdatedEventArgs e = new RedOwnershipSecondsUpdatedEventArgs {
+          RedOwnershipSeconds = _redOwnershipSeconds
+        };
+        OnRedOwnershipSecondsUpdated(e);
       }
     }
 
@@ -151,6 +137,7 @@ namespace Server.Domain
             RedSwitchOwnershipSeconds = _redSwitchOwnershipSeconds
           };
           OnRedSwitchOwnershipSecondsUpdated(e);
+          SumRedOwnershipSeconds();
         }
       }
     }
@@ -172,6 +159,7 @@ namespace Server.Domain
             BlueSwitchOwnershipSeconds = _blueSwitchOwnershipSeconds
           };
           OnBlueSwitchOwnershipSecondsUpdated(e);
+          SumBlueOwnershipSeconds();
         }
       }
     }
@@ -193,6 +181,7 @@ namespace Server.Domain
             RedScaleOwnershipSeconds = _redScaleOwnershipSeconds
           };
           OnRedScaleOwnershipSecondsUpdated(e);
+          SumRedOwnershipSeconds();
         }
       }
     }
@@ -214,6 +203,7 @@ namespace Server.Domain
             BlueScaleOwnershipSeconds = _blueScaleOwnershipSeconds
           };
           OnBlueScaleOwnershipSecondsUpdated(e);
+          SumBlueOwnershipSeconds();
         }
       }
     }
