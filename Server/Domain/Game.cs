@@ -427,7 +427,7 @@ namespace Server.Domain
     {
       Field.Off();
       _scoreBoard.StateOfPlay = StateOfPlayEnum.DRIVERCOUNTDOWN;
-      ElapsedDeciseconds = _gameSettings.DriverCountdown * -10;
+      ElapsedDeciseconds = _gameSettings.DriverCountdown * 10;
       _autonomousCountdownSignaler.Change(_gameSettings.DriverCountdown * 1000, Timeout.Infinite);
       _driverCountdownTimer.Change(0, 100);
     }
@@ -438,7 +438,7 @@ namespace Server.Domain
 //      WaitHandle waitHandle = new AutoResetEvent(false);
       _driverCountdownTimer.Change(Timeout.Infinite, Timeout.Infinite);
 //      WaitHandle.WaitAll(new[] {waitHandle});
-      ElapsedDeciseconds = _gameSettings.AutonomousCountdown * -10;
+      ElapsedDeciseconds = _gameSettings.AutonomousCountdown * 10;
       _autonomousSignaler.Change(_gameSettings.AutonomousCountdown * 1000, Timeout.Infinite);
       _autonomousCountdownTimer.Change(0, 100);
     }
@@ -446,6 +446,7 @@ namespace Server.Domain
     private void OnAutonomousStart(object state)
     {
       _scoreBoard.StateOfPlay = StateOfPlayEnum.AUTONOMOUS;
+      ElapsedDeciseconds = _gameSettings.Autonomous * 10;
 //      WaitHandle waitHandle = new AutoResetEvent(false);
       _autonomousCountdownTimer.Change(Timeout.Infinite, Timeout.Infinite);
 //      WaitHandle.WaitAll(new[] {waitHandle});
@@ -468,6 +469,7 @@ namespace Server.Domain
     private void OnTeleoperatedStart(object state)
     {
       _scoreBoard.StateOfPlay = StateOfPlayEnum.TELEOPERATED;
+      ElapsedDeciseconds = _gameSettings.Teleoperated * 10;
       _endGameSignaler.Change((_gameSettings.Teleoperated - _gameSettings.EndGame) * 1000, Timeout.Infinite);
       _gameOverSignaler.Change(_gameSettings.Teleoperated * 1000, Timeout.Infinite);
       _gameTimer.Change(0, 100);
@@ -515,17 +517,17 @@ namespace Server.Domain
 
     private void OnDriverCountdown(object state)
     {
-      ElapsedDeciseconds += 1;
+      ElapsedDeciseconds -= 1;
     }
 
     private void OnAutonomousCountdown(object state)
     {
-      ElapsedDeciseconds += 1;
+      ElapsedDeciseconds -= 1;
     }
 
     private void OnGameQuantum(object state)
     {
-      ElapsedDeciseconds += 1;
+      ElapsedDeciseconds -= 1;
 
       if (Field.BlueSwitch != null)
       {
