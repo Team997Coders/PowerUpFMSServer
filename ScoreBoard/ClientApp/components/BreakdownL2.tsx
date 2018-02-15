@@ -1,15 +1,15 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-interface BreakdownProps {
+interface BreakdownL2Props {
   alliance: string;
-  scale: number;
-  switch: number;
-  climb: number;
+  vault: number;
+  park: number;
+  autorun: number;
 }
 
-export class Breakdown extends React.Component<BreakdownProps, {}> {
-  constructor(props: BreakdownProps) {
+export class BreakdownL2 extends React.Component<BreakdownL2Props, {}> {
+  constructor(props: BreakdownL2Props) {
     super(props);
   }
 
@@ -23,13 +23,13 @@ export class Breakdown extends React.Component<BreakdownProps, {}> {
 
     return <div>
       <div className='col-md-2' style={styles}>
-        SW: {this.props.switch}
+        V: {this.props.vault}
       </div>
       <div className='col-md-2' style={styles}>
-        SC: {this.props.scale}
+        P: {this.props.park}
       </div>
       <div className='col-md-2' style={styles}>
-        CL: {this.props.climb}
+        AR: {this.props.autorun}
       </div>
     </div>
   }

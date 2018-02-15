@@ -13,7 +13,7 @@ export class Timer extends React.Component<TimerProps, {}> {
   // Note that the rendering lib does not like fonts with spaces in it...thus the quoting bs
   public render() {
     var styles = {
-      fontSize: 220,
+      fontSize: 190,
       color: 'white',
       lineHeight: '1em',
       fontFamily: "'Press Start 2P'",

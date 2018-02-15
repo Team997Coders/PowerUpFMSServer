@@ -2,7 +2,8 @@ import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 import { TotalScore } from './TotalScore';
 import { Timer } from './Timer';
-import { Breakdown } from './Breakdown';
+import { BreakdownL1 } from './BreakdownL1';
+import { BreakdownL2 } from './BreakdownL2';
 import { Sound } from './Sound';
 
 //const Sound = require('react-sound');
@@ -35,9 +36,17 @@ interface GameState {
   redSwitchSecs: number;
   redScaleSecs: number;
   redTotalSecs: number;
+  redVaultScore: number;
+  redParkScore: number;
+  redAutorunScore: number;
+  redClimbScore: number;
   blueTotalSecs: number;
   blueSwitchSecs: number;
   blueScaleSecs: number;
+  blueVaultScore: number;
+  blueParkScore: number;
+  blueAutorunScore: number;
+  blueClimbScore: number;
   playFile: string;
 }
 
@@ -54,9 +63,17 @@ export class Game extends React.Component<{}, GameState> {
       redSwitchSecs: 0,
       redScaleSecs: 0,
       redTotalSecs: 0,
+      redVaultScore: 0,
+      redParkScore: 0,
+      redAutorunScore: 0,
+      redClimbScore: 0,
       blueSwitchSecs: 0,
       blueScaleSecs: 0,
       blueTotalSecs: 0,
+      blueVaultScore: 0,
+      blueParkScore: 0,
+      blueAutorunScore: 0,
+      blueClimbScore: 0,
       playFile: ""
     };
     let self = this;
@@ -76,6 +93,46 @@ export class Game extends React.Component<{}, GameState> {
       if ("RedOwnershipSeconds" in message)
       {
         self.setState({ redTotalSecs: message['RedOwnershipSeconds'] });
+        return;
+      }
+      if ("RedVaultScore" in message)
+      {
+        self.setState({ redVaultScore: message['RedVaultScore'] });
+        return;
+      }
+      if ("BlueVaultScore" in message)
+      {
+        self.setState({ blueVaultScore: message['BlueVaultScore'] });
+        return;
+      }
+      if ("RedParkScore" in message)
+      {
+        self.setState({ redParkScore: message['RedParkScore'] });
+        return;
+      }
+      if ("BlueParkScore" in message)
+      {
+        self.setState({ blueParkScore: message['BlueParkScore'] });
+        return;
+      }
+      if ("RedAutorunScore" in message)
+      {
+        self.setState({ redAutorunScore: message['RedAutorunScore'] });
+        return;
+      }
+      if ("BlueAutorunScore" in message)
+      {
+        self.setState({ blueAutorunScore: message['BlueAutorunScore'] });
+        return;
+      }
+      if ("RedClimbScore" in message)
+      {
+        self.setState({ redClimbScore: message['RedClimbScore'] });
+        return;
+      }
+      if ("BlueClimbScore" in message)
+      {
+        self.setState({ blueClimbScore: message['BlueClimbScore'] });
         return;
       }
       if ("BlueSwitchOwnershipSeconds" in message)
@@ -126,9 +183,17 @@ export class Game extends React.Component<{}, GameState> {
           self.setState({ redScaleSecs: 0 });
           self.setState({ redSwitchSecs: 0 });
           self.setState({ redTotalSecs: 0 });
+          self.setState({ redVaultScore: 0 });
+          self.setState({ redParkScore: 0 });
+          self.setState({ redAutorunScore: 0 });
+          self.setState({ redClimbScore: 0 });
           self.setState({ blueScaleSecs: 0 });
           self.setState({ blueSwitchSecs: 0 });
           self.setState({ blueTotalSecs: 0 });
+          self.setState({ blueVaultScore: 0 });
+          self.setState({ blueParkScore: 0 });
+          self.setState({ blueAutorunScore: 0 });
+          self.setState({ blueClimbScore: 0 });
           self.setState({ gameClock: 0 });
         }
         return;
@@ -152,8 +217,12 @@ export class Game extends React.Component<{}, GameState> {
         </div>
       </div>
       <div className='row'>
-        <Breakdown alliance='red' switch={this.state.redSwitchSecs} scale={this.state.redScaleSecs} climb={0} />
-        <Breakdown alliance='#4169E1' switch={this.state.blueSwitchSecs} scale={this.state.blueScaleSecs} climb={0} />
+        <BreakdownL1 alliance='red' switch={this.state.redSwitchSecs} scale={this.state.redScaleSecs} climb={this.state.redClimbScore} />
+        <BreakdownL1 alliance='#4169E1' switch={this.state.blueSwitchSecs} scale={this.state.blueScaleSecs} climb={this.state.blueClimbScore} />
+      </div>
+      <div className='row'>
+        <BreakdownL2 alliance='red' vault={this.state.redVaultScore} park={this.state.redParkScore} autorun={this.state.redAutorunScore} />
+        <BreakdownL2 alliance='#4169E1' vault={this.state.blueVaultScore} park={this.state.blueParkScore} autorun={this.state.blueAutorunScore} />
       </div>
       <Sound url={this.state.playFile} type="audio/mpeg" />
     </div>

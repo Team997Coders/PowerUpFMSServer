@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
+import { ScoringRadioButton } from './ScoringRadioButton';
+
 
 // These definitions are missing from VSCODE at this time...arg!
 interface EventSource extends EventTarget {
@@ -68,16 +70,61 @@ export class Home extends React.Component<RouteComponentProps<{}>, HomeState> {
         <button disabled={this.state.playing} onClick={ () => { this.reset() } }>Reset</button>
         <button disabled={this.state.playing || !this.state.reset} onClick={ () => { this.play() } }>Play</button>
         <button disabled={!this.state.playing} onClick={ () => { this.fault() } }>Fault</button>
+        <h1>Game Scoring</h1>
+        <h2>Auto-Run</h2>
+        <ScoringRadioButton alliance="Red" name="redautorun" disabled={!this.state.playing} maximumScore={3} callbackParent={s => this.onRedAutoRunScoreChanged(s)}/>
+        <ScoringRadioButton alliance="Blue" name="blueautorun" disabled={!this.state.playing} maximumScore={3} callbackParent={s => this.onBlueAutoRunScoreChanged(s)}/>
+        <h2>Vault</h2>
+        <ScoringRadioButton alliance="Red" name="redvault" disabled={!this.state.playing} maximumScore={9} callbackParent={s => this.onRedVaultScoreChanged(s)}/>
+        <ScoringRadioButton alliance="Blue" name="bluevault" disabled={!this.state.playing} maximumScore={9} callbackParent={s => this.onBlueVaultScoreChanged(s)}/>
+        <h2>Park</h2>
+        <ScoringRadioButton alliance="Red" name="redpark" disabled={!this.state.playing} maximumScore={3} callbackParent={s => this.onRedParkScoreChanged(s)}/>
+        <ScoringRadioButton alliance="Blue" name="bluepark" disabled={!this.state.playing} maximumScore={3} callbackParent={s => this.onBlueParkScoreChanged(s)}/>
+        <h2>Climb</h2>
+        <ScoringRadioButton alliance="Red" name="redclimb" disabled={!this.state.playing} maximumScore={3} callbackParent={s => this.onRedClimbScoreChanged(s)}/>
+        <ScoringRadioButton alliance="Blue" name="blueclimb" disabled={!this.state.playing} maximumScore={3} callbackParent={s => this.onBlueClimbScoreChanged(s)}/>
         <h1>Game Status</h1>
         {this.state.playing && <p><strong>PLAYING</strong></p>}
         <p>Game clock: <strong>{ this.state.gameClock }</strong></p>
         <p>Red switch seconds: <strong>{ this.state.redSwitchSecs }</strong></p>
         <p>Red scale seconds: <strong>{ this.state.redScaleSecs }</strong></p>
-        <p>Red total seconds: <strong>{ this.state.redTotalSecs }</strong></p>
+        <p>Red total: <strong>{ this.state.redTotalSecs }</strong></p>
         <p>Blue switch seconds: <strong>{ this.state.blueSwitchSecs }</strong></p>
         <p>Blue scale seconds: <strong>{ this.state.blueScaleSecs }</strong></p>
-        <p>Blue total seconds: <strong>{ this.state.blueTotalSecs }</strong></p>
+        <p>Blue total: <strong>{ this.state.blueTotalSecs }</strong></p>
       </div>;
+  }
+
+  onRedAutoRunScoreChanged(newScore: number) {
+    this.postData(`${this.serverURL}/api/game/autorun`, { alliance: 'Red', score: newScore.toString()});
+  }
+
+  onBlueAutoRunScoreChanged(newScore: number) {
+    this.postData(`${this.serverURL}/api/game/autorun`, { alliance: 'Blue', score: newScore.toString()});
+  }
+
+  onRedVaultScoreChanged(newScore: number) {
+    this.postData(`${this.serverURL}/api/game/vault`, { alliance: 'Red', score: newScore.toString()});
+  }
+
+  onBlueVaultScoreChanged(newScore: number) {
+    this.postData(`${this.serverURL}/api/game/vault`, { alliance: 'Blue', score: newScore.toString()});
+  }
+
+  onRedParkScoreChanged(newScore: number) {
+    this.postData(`${this.serverURL}/api/game/park`, { alliance: 'Red', score: newScore.toString()});
+  }
+
+  onBlueParkScoreChanged(newScore: number) {
+    this.postData(`${this.serverURL}/api/game/park`, { alliance: 'Blue', score: newScore.toString()});
+  }
+
+  onRedClimbScoreChanged(newScore: number) {
+    this.postData(`${this.serverURL}/api/game/climb`, { alliance: 'Red', score: newScore.toString()});
+  }
+
+  onBlueClimbScoreChanged(newScore: number) {
+    this.postData(`${this.serverURL}/api/game/climb`, { alliance: 'Blue', score: newScore.toString()});
   }
 
   fieldOff() {
@@ -96,7 +143,7 @@ export class Home extends React.Component<RouteComponentProps<{}>, HomeState> {
   }
 
   play() {
-    fetch(`${this.serverURL}/api/Game/Play`, this.fetchParameters);
+    fetch(`${this.serverURL}/api/Game/state/Play`, this.fetchParameters);
     this.setState({ playing: true });
     this.setState({ reset: false });
     let self = this;
@@ -147,7 +194,7 @@ export class Home extends React.Component<RouteComponentProps<{}>, HomeState> {
   }
 
   reset() {
-    fetch(`${this.serverURL}/api/Game/Reset`, this.fetchParameters);
+    fetch(`${this.serverURL}/api/Game/state/Reset`, this.fetchParameters);
     this.setState({ reset: true });
     this.setState({
       gameClock: 0,
@@ -162,8 +209,32 @@ export class Home extends React.Component<RouteComponentProps<{}>, HomeState> {
 
   fault() {
     this.eventSource.close();
-    fetch(`${this.serverURL}/api/Game/Fault`, this.fetchParameters)
+    fetch(`${this.serverURL}/api/Game/state/Fault`, this.fetchParameters)
       .catch(error => console.log(error));
     this.setState({ playing: false });
   }
+
+  urlEncodeBody(data: { [key: string]: string }) : string {
+    var str = [];
+    for(var p in data)
+      str.push(encodeURIComponent(p) + "=" + encodeURIComponent(data[p]));
+    return str.join("&");
+  }
+
+  postData(url: string, data: { [key: string]: string } ) {
+    // Default options are marked with *
+    return fetch(url, {
+      body: this.urlEncodeBody(data),
+      cache: 'no-cache', // *default, cache, reload, force-cache, only-if-cached
+      credentials: 'same-origin', // include, *omit
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      method: 'POST', // *GET, PUT, DELETE, etc.
+      mode: 'cors', // no-cors, *same-origin
+      redirect: 'follow', // *manual, error
+      referrer: 'no-referrer', // *client
+    })
+    .then(response => response) // simply returns the response
+  }  
 }
