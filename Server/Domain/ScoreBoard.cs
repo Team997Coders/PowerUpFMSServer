@@ -49,6 +49,46 @@ namespace Server.Domain
     public StateOfPlayEnum StateOfPlay { get; set; }
   }
 
+  public class BlueVaultScoreUpdatedEventArgs : EventArgs
+  {
+    public int BlueVaultScore { get; set; }
+  }
+
+  public class RedVaultScoreUpdatedEventArgs : EventArgs
+  {
+    public int RedVaultScore { get; set; }
+  }
+
+  public class BlueParkScoreUpdatedEventArgs : EventArgs
+  {
+    public int BlueParkScore { get; set; }
+  }
+
+  public class RedParkScoreUpdatedEventArgs : EventArgs
+  {
+    public int RedParkScore { get; set; }
+  }
+
+  public class BlueAutorunScoreUpdatedEventArgs : EventArgs
+  {
+    public int BlueAutorunScore { get; set; }
+  }
+
+  public class RedAutorunScoreUpdatedEventArgs : EventArgs
+  {
+    public int RedAutorunScore { get; set; }
+  }
+
+  public class BlueClimbScoreUpdatedEventArgs : EventArgs
+  {
+    public int BlueClimbScore { get; set; }
+  }
+
+  public class RedClimbScoreUpdatedEventArgs : EventArgs
+  {
+    public int RedClimbScore { get; set; }
+  }
+
   public class ScoreBoard
   {
     private int _elapsedDeciseconds;
@@ -64,10 +104,174 @@ namespace Server.Domain
     private int _redScaleOwnershipSeconds;
     private int _blueSwitchOwnershipSeconds;
     private int _blueScaleOwnershipSeconds;
+    private int _blueVaultCount;
+    private int _blueParkCount;
+    private int _blueAutorunCount;
+    private int _blueClimbCount;
+    private int _redVaultCount;
+    private int _redParkCount;
+    private int _redAutorunCount;
+    private int _redClimbCount;
 
     private string _autonomousFieldString;
 
     private StateOfPlayEnum _stateOfPlay;
+
+    public int BlueVaultCount
+    {
+      get
+      {
+        return _blueVaultCount;
+      }
+      set
+      {
+        _blueVaultCount = value;
+        BlueVaultScoreUpdatedEventArgs e = new BlueVaultScoreUpdatedEventArgs {
+          BlueVaultScore = this.BlueVaultScore
+        };
+        OnBlueVaultScoreUpdated(e);
+        SumBlueOwnershipSeconds();
+      }
+    }
+
+    public int RedVaultCount
+    {
+      get
+      {
+        return _redVaultCount;
+      }
+      set
+      {
+        _redVaultCount = value;
+        RedVaultScoreUpdatedEventArgs e = new RedVaultScoreUpdatedEventArgs {
+          RedVaultScore = this.RedVaultScore
+        };
+        OnRedVaultScoreUpdated(e);
+        SumRedOwnershipSeconds();
+      }
+    }
+
+    public int BlueParkCount
+    {
+      get
+      {
+        return _blueParkCount;
+      }
+      set
+      {
+        _blueParkCount = value;
+        BlueParkScoreUpdatedEventArgs e = new BlueParkScoreUpdatedEventArgs {
+          BlueParkScore = this.BlueParkScore
+        };
+        OnBlueParkScoreUpdated(e);
+        SumBlueOwnershipSeconds();
+      }
+    }
+
+    public int RedParkCount
+    {
+      get
+      {
+        return _redParkCount;
+      }
+      set
+      {
+        _redParkCount = value;
+        RedParkScoreUpdatedEventArgs e = new RedParkScoreUpdatedEventArgs {
+          RedParkScore = this.RedParkScore
+        };
+        OnRedParkScoreUpdated(e);
+        SumRedOwnershipSeconds();
+      }
+    }
+
+    public int BlueAutorunCount
+    {
+      get
+      {
+        return _blueAutorunCount;
+      }
+      set
+      {
+        _blueAutorunCount = value;
+        BlueAutorunScoreUpdatedEventArgs e = new BlueAutorunScoreUpdatedEventArgs {
+          BlueAutorunScore = this.BlueAutorunScore
+        };
+        OnBlueAutorunScoreUpdated(e);
+        SumBlueOwnershipSeconds();
+      }
+    }
+
+    public int RedAutorunCount
+    {
+      get
+      {
+        return _redAutorunCount;
+      }
+      set
+      {
+        _redAutorunCount = value;
+        RedAutorunScoreUpdatedEventArgs e = new RedAutorunScoreUpdatedEventArgs {
+          RedAutorunScore = this.RedAutorunScore
+        };
+        OnRedAutorunScoreUpdated(e);
+        SumRedOwnershipSeconds();
+      }
+    }
+
+    public int BlueClimbCount
+    {
+      get
+      {
+        return _blueClimbCount;
+      }
+      set
+      {
+        _blueClimbCount = value;
+        BlueClimbScoreUpdatedEventArgs e = new BlueClimbScoreUpdatedEventArgs {
+          BlueClimbScore = this.BlueClimbScore
+        };
+        OnBlueClimbScoreUpdated(e);
+        SumBlueOwnershipSeconds();
+      }
+    }
+
+    public int RedClimbCount
+    {
+      get
+      {
+        return _redClimbCount;
+      }
+      set
+      {
+        _redClimbCount = value;
+        RedClimbScoreUpdatedEventArgs e = new RedClimbScoreUpdatedEventArgs {
+          RedClimbScore = this.RedClimbScore
+        };
+        OnRedClimbScoreUpdated(e);
+        SumRedOwnershipSeconds();
+      }
+    }
+
+    private int CalculateVaultScore(int count)
+    {
+      return count * 5;
+    }
+
+    private int CalculateParkScore(int count)
+    {
+      return count * 5;
+    }
+
+    private int CalculateClimbScore(int count)
+    {
+      return count * 30;
+    }
+
+    private int CalculateAutorunScore(int count)
+    {
+      return count * 5;
+    }
 
     public int ElapsedDeciseconds
     { 
@@ -94,7 +298,11 @@ namespace Server.Domain
     {
       int tempSeconds = 
         Convert.ToInt32(_blueSwitchOwnershipDeciseconds * 0.1) 
-        + Convert.ToInt32(_blueScaleOwnershipDeciseconds * 0.1);
+        + Convert.ToInt32(_blueScaleOwnershipDeciseconds * 0.1)
+        + BlueVaultScore
+        + BlueAutorunScore
+        + BlueParkScore
+        + BlueClimbScore;
       if (tempSeconds != _blueOwnershipSeconds)
       {
         _blueOwnershipSeconds = tempSeconds;
@@ -109,7 +317,11 @@ namespace Server.Domain
     {
       int tempSeconds = 
         Convert.ToInt32(_redSwitchOwnershipDeciseconds * 0.1) 
-        + Convert.ToInt32(_redScaleOwnershipDeciseconds * 0.1);
+        + Convert.ToInt32(_redScaleOwnershipDeciseconds * 0.1)
+        + RedVaultScore
+        + RedAutorunScore
+        + RedParkScore
+        + RedClimbScore;
       if (tempSeconds != _redOwnershipSeconds)
       {
         _redOwnershipSeconds = tempSeconds;
@@ -274,6 +486,46 @@ namespace Server.Domain
       get { return _blueScaleOwnershipSeconds; }
     }
 
+    public int BlueVaultScore
+    {
+      get { return CalculateVaultScore(_blueVaultCount); }
+    }
+
+    public int RedVaultScore
+    {
+      get { return CalculateVaultScore(_redVaultCount); }
+    }
+
+    public int BlueParkScore
+    {
+      get { return CalculateParkScore(_blueParkCount); }
+    }
+
+    public int RedParkScore
+    {
+      get { return CalculateParkScore(_redParkCount); }
+    }
+
+    public int BlueAutorunScore
+    {
+      get { return CalculateAutorunScore(_blueAutorunCount); }
+    }
+
+    public int RedAutorunScore
+    {
+      get { return CalculateAutorunScore(_redAutorunCount); }
+    }
+
+    public int BlueClimbScore
+    {
+      get { return CalculateClimbScore(_blueClimbCount); }
+    }
+
+    public int RedClimbScore
+    {
+      get { return CalculateClimbScore(_redClimbCount); }
+    }
+
     public event EventHandler<ElapsedSecondsUpdatedEventArgs> ElapsedSecondsUpdated;
     public event EventHandler<RedOwnershipSecondsUpdatedEventArgs> RedOwnershipSecondsUpdated;
     public event EventHandler<BlueOwnershipSecondsUpdatedEventArgs> BlueOwnershipSecondsUpdated;
@@ -283,6 +535,86 @@ namespace Server.Domain
     public event EventHandler<BlueScaleOwnershipSecondsUpdatedEventArgs> BlueScaleOwnershipSecondsUpdated;
     public event EventHandler<AutonomousFieldStringUpdatedEventArgs> AutonomousFieldStringUpdated;
     public event EventHandler<StateOfPlayUpdatedEventArgs> StateOfPlayUpdated;
+    public event EventHandler<BlueVaultScoreUpdatedEventArgs> BlueVaultScoreUpdated;
+    public event EventHandler<RedVaultScoreUpdatedEventArgs> RedVaultScoreUpdated;
+    public event EventHandler<BlueParkScoreUpdatedEventArgs> BlueParkScoreUpdated;
+    public event EventHandler<RedParkScoreUpdatedEventArgs> RedParkScoreUpdated;
+    public event EventHandler<BlueAutorunScoreUpdatedEventArgs> BlueAutorunScoreUpdated;
+    public event EventHandler<RedAutorunScoreUpdatedEventArgs> RedAutorunScoreUpdated;
+    public event EventHandler<BlueClimbScoreUpdatedEventArgs> BlueClimbScoreUpdated;
+    public event EventHandler<RedClimbScoreUpdatedEventArgs> RedClimbScoreUpdated;
+
+    protected virtual void OnBlueVaultScoreUpdated(BlueVaultScoreUpdatedEventArgs e)
+    {
+      EventHandler<BlueVaultScoreUpdatedEventArgs> handler = BlueVaultScoreUpdated;
+      if (handler != null)
+      {
+        handler(this, e);
+      }
+    }
+
+    protected virtual void OnRedVaultScoreUpdated(RedVaultScoreUpdatedEventArgs e)
+    {
+      EventHandler<RedVaultScoreUpdatedEventArgs> handler = RedVaultScoreUpdated;
+      if (handler != null)
+      {
+        handler(this, e);
+      }
+    }
+
+    protected virtual void OnBlueParkScoreUpdated(BlueParkScoreUpdatedEventArgs e)
+    {
+      EventHandler<BlueParkScoreUpdatedEventArgs> handler = BlueParkScoreUpdated;
+      if (handler != null)
+      {
+        handler(this, e);
+      }
+    }
+
+    protected virtual void OnRedParkScoreUpdated(RedParkScoreUpdatedEventArgs e)
+    {
+      EventHandler<RedParkScoreUpdatedEventArgs> handler = RedParkScoreUpdated;
+      if (handler != null)
+      {
+        handler(this, e);
+      }
+    }
+
+    protected virtual void OnBlueAutorunScoreUpdated(BlueAutorunScoreUpdatedEventArgs e)
+    {
+      EventHandler<BlueAutorunScoreUpdatedEventArgs> handler = BlueAutorunScoreUpdated;
+      if (handler != null)
+      {
+        handler(this, e);
+      }
+    }
+
+    protected virtual void OnRedAutorunScoreUpdated(RedAutorunScoreUpdatedEventArgs e)
+    {
+      EventHandler<RedAutorunScoreUpdatedEventArgs> handler = RedAutorunScoreUpdated;
+      if (handler != null)
+      {
+        handler(this, e);
+      }
+    }
+
+    protected virtual void OnBlueClimbScoreUpdated(BlueClimbScoreUpdatedEventArgs e)
+    {
+      EventHandler<BlueClimbScoreUpdatedEventArgs> handler = BlueClimbScoreUpdated;
+      if (handler != null)
+      {
+        handler(this, e);
+      }
+    }
+
+    protected virtual void OnRedClimbScoreUpdated(RedClimbScoreUpdatedEventArgs e)
+    {
+      EventHandler<RedClimbScoreUpdatedEventArgs> handler = RedClimbScoreUpdated;
+      if (handler != null)
+      {
+        handler(this, e);
+      }
+    }
 
     protected virtual void OnElapsedSecondsUpdated(ElapsedSecondsUpdatedEventArgs e)
     {

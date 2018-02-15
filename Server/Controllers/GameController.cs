@@ -47,18 +47,34 @@ namespace Server.Controllers
         OnBlueOwnershipSecondsUpdated(null, new BlueOwnershipSecondsUpdatedEventArgs{BlueOwnershipSeconds=0});
         OnBlueSwitchOwnershipSecondsUpdated(null, new BlueSwitchOwnershipSecondsUpdatedEventArgs{BlueSwitchOwnershipSeconds=0});
         OnBlueScaleOwnershipSecondsUpdated(null, new BlueScaleOwnershipSecondsUpdatedEventArgs{BlueScaleOwnershipSeconds=0});
+        OnBlueVaultScoreUpdated(null, new BlueVaultScoreUpdatedEventArgs{BlueVaultScore=0});
+        OnBlueParkScoreUpdated(null, new BlueParkScoreUpdatedEventArgs{BlueParkScore=0});
+        OnBlueAutorunScoreUpdated(null, new BlueAutorunScoreUpdatedEventArgs{BlueAutorunScore=0});
+        OnBlueClimbScoreUpdated(null, new BlueClimbScoreUpdatedEventArgs{BlueClimbScore=0});
         OnRedOwnershipSecondsUpdated(null, new RedOwnershipSecondsUpdatedEventArgs{RedOwnershipSeconds=0});
         OnRedSwitchOwnershipSecondsUpdated(null, new RedSwitchOwnershipSecondsUpdatedEventArgs{RedSwitchOwnershipSeconds=0});
         OnRedScaleOwnershipSecondsUpdated(null, new RedScaleOwnershipSecondsUpdatedEventArgs{RedScaleOwnershipSeconds=0});
+        OnRedVaultScoreUpdated(null, new RedVaultScoreUpdatedEventArgs{RedVaultScore=0});
+        OnRedParkScoreUpdated(null, new RedParkScoreUpdatedEventArgs{RedParkScore=0});
+        OnRedAutorunScoreUpdated(null, new RedAutorunScoreUpdatedEventArgs{RedAutorunScore=0});
+        OnRedClimbScoreUpdated(null, new RedClimbScoreUpdatedEventArgs{RedClimbScore=0});
 
         // wire up event handlers
         _game.ScoreBoard.ElapsedSecondsUpdated += OnElapsedSecondsUpdated;
         _game.ScoreBoard.BlueOwnershipSecondsUpdated += OnBlueOwnershipSecondsUpdated;
         _game.ScoreBoard.BlueSwitchOwnershipSecondsUpdated += OnBlueSwitchOwnershipSecondsUpdated;
         _game.ScoreBoard.BlueScaleOwnershipSecondsUpdated += OnBlueScaleOwnershipSecondsUpdated;
+        _game.ScoreBoard.BlueVaultScoreUpdated += OnBlueVaultScoreUpdated;
+        _game.ScoreBoard.BlueParkScoreUpdated += OnBlueParkScoreUpdated;
+        _game.ScoreBoard.BlueAutorunScoreUpdated += OnBlueAutorunScoreUpdated;
+        _game.ScoreBoard.BlueClimbScoreUpdated += OnBlueClimbScoreUpdated;
         _game.ScoreBoard.RedOwnershipSecondsUpdated += OnRedOwnershipSecondsUpdated;
         _game.ScoreBoard.RedSwitchOwnershipSecondsUpdated += OnRedSwitchOwnershipSecondsUpdated;
         _game.ScoreBoard.RedScaleOwnershipSecondsUpdated += OnRedScaleOwnershipSecondsUpdated;
+        _game.ScoreBoard.RedVaultScoreUpdated += OnRedVaultScoreUpdated;
+        _game.ScoreBoard.RedParkScoreUpdated += OnRedParkScoreUpdated;
+        _game.ScoreBoard.RedAutorunScoreUpdated += OnRedAutorunScoreUpdated;
+        _game.ScoreBoard.RedClimbScoreUpdated += OnRedClimbScoreUpdated;
         _game.ScoreBoard.StateOfPlayUpdated += OnStateOfPlayUpdated;
 
         // wait until the game is done
@@ -71,9 +87,17 @@ namespace Server.Controllers
         _game.ScoreBoard.BlueOwnershipSecondsUpdated -= OnBlueOwnershipSecondsUpdated;
         _game.ScoreBoard.BlueSwitchOwnershipSecondsUpdated -= OnBlueSwitchOwnershipSecondsUpdated;
         _game.ScoreBoard.BlueScaleOwnershipSecondsUpdated -= OnBlueScaleOwnershipSecondsUpdated;
+        _game.ScoreBoard.BlueVaultScoreUpdated -= OnBlueVaultScoreUpdated;
+        _game.ScoreBoard.BlueParkScoreUpdated -= OnBlueParkScoreUpdated;
+        _game.ScoreBoard.BlueAutorunScoreUpdated -= OnBlueAutorunScoreUpdated;
+        _game.ScoreBoard.BlueClimbScoreUpdated -= OnBlueClimbScoreUpdated;
         _game.ScoreBoard.RedOwnershipSecondsUpdated -= OnRedOwnershipSecondsUpdated;
         _game.ScoreBoard.RedSwitchOwnershipSecondsUpdated -= OnRedSwitchOwnershipSecondsUpdated;
         _game.ScoreBoard.RedScaleOwnershipSecondsUpdated -= OnRedScaleOwnershipSecondsUpdated;
+        _game.ScoreBoard.RedVaultScoreUpdated -= OnRedVaultScoreUpdated;
+        _game.ScoreBoard.RedParkScoreUpdated -= OnRedParkScoreUpdated;
+        _game.ScoreBoard.RedAutorunScoreUpdated -= OnRedAutorunScoreUpdated;
+        _game.ScoreBoard.RedClimbScoreUpdated -= OnRedClimbScoreUpdated;
         _game.ScoreBoard.StateOfPlayUpdated -= OnStateOfPlayUpdated;
       }
       else
@@ -130,8 +154,57 @@ namespace Server.Controllers
       _response.Body.Flush();
     }
 
-    [HttpPost("{state}")]
-    public async Task<IActionResult> Post([FromRoute]string state)
+    private void OnRedVaultScoreUpdated(object sender, RedVaultScoreUpdatedEventArgs e)
+    {
+      _response.WriteAsync($"data: {{\"RedVaultScore\": {e.RedVaultScore}}}\r\r").Wait();
+      _response.Body.Flush();
+    }
+
+    private void OnBlueVaultScoreUpdated(object sender, BlueVaultScoreUpdatedEventArgs e)
+    {
+      _response.WriteAsync($"data: {{\"BlueVaultScore\": {e.BlueVaultScore}}}\r\r").Wait();
+      _response.Body.Flush();
+    }
+
+    private void OnRedParkScoreUpdated(object sender, RedParkScoreUpdatedEventArgs e)
+    {
+      _response.WriteAsync($"data: {{\"RedParkScore\": {e.RedParkScore}}}\r\r").Wait();
+      _response.Body.Flush();
+    }
+
+    private void OnBlueParkScoreUpdated(object sender, BlueParkScoreUpdatedEventArgs e)
+    {
+      _response.WriteAsync($"data: {{\"BlueParkScore\": {e.BlueParkScore}}}\r\r").Wait();
+      _response.Body.Flush();
+    }
+
+    private void OnRedAutorunScoreUpdated(object sender, RedAutorunScoreUpdatedEventArgs e)
+    {
+      _response.WriteAsync($"data: {{\"RedAutorunScore\": {e.RedAutorunScore}}}\r\r").Wait();
+      _response.Body.Flush();
+    }
+
+    private void OnBlueAutorunScoreUpdated(object sender, BlueAutorunScoreUpdatedEventArgs e)
+    {
+      _response.WriteAsync($"data: {{\"BlueAutorunScore\": {e.BlueAutorunScore}}}\r\r").Wait();
+      _response.Body.Flush();
+    }
+
+    private void OnRedClimbScoreUpdated(object sender, RedClimbScoreUpdatedEventArgs e)
+    {
+      _response.WriteAsync($"data: {{\"RedClimbScore\": {e.RedClimbScore}}}\r\r").Wait();
+      _response.Body.Flush();
+    }
+
+    private void OnBlueClimbScoreUpdated(object sender, BlueClimbScoreUpdatedEventArgs e)
+    {
+      _response.WriteAsync($"data: {{\"BlueClimbScore\": {e.BlueClimbScore}}}\r\r").Wait();
+      _response.Body.Flush();
+    }
+
+
+    [HttpPost("state/{state}")]
+    public async Task<IActionResult> PostState([FromRoute]string state)
     {
       ScoreBoard scoreboard = new ScoreBoard();
       switch (state.ToUpper())
@@ -160,6 +233,122 @@ namespace Server.Controllers
         }
       }
       return NoContent();
+    }
+
+    [HttpPost("vault")]
+    public async Task<IActionResult> PostVaultScore([FromForm]string alliance, [FromForm]int score)
+    {
+      // Score in this context is 0, 1, 2 or 3...to 9, which is the number of cubes
+      // The scoreboard will calculate with actual score.
+      try
+      {
+        if (Alliance.Parse(alliance).IsRed)
+        {
+          if (_game.ScoreBoard != null)
+          {
+            _game.ScoreBoard.RedVaultCount = score;
+          }
+        }
+        else
+        {
+          if (_game.ScoreBoard != null)
+          {
+            _game.ScoreBoard.BlueVaultCount = score;
+          }
+        }
+        return NoContent();
+      }
+      catch
+      {
+        return BadRequest();
+      }
+    }
+
+    [HttpPost("climb")]
+    public async Task<IActionResult> PostClimbScore([FromForm]string alliance, [FromForm]int score)
+    {
+      // Score in this context is 0, 1, 2 or 3, which is the number of robots climbing
+      // The scoreboard will calculate with actual score.
+      try
+      {
+        if (Alliance.Parse(alliance).IsRed)
+        {
+          if (_game.ScoreBoard != null)
+          {
+            _game.ScoreBoard.RedClimbCount = score;
+          }
+        }
+        else
+        {
+          if (_game.ScoreBoard != null)
+          {
+            _game.ScoreBoard.BlueClimbCount = score;
+          }
+        }
+        return NoContent();
+      }
+      catch
+      {
+        return BadRequest();
+      }      
+    }
+
+    [HttpPost("autorun")]
+    public async Task<IActionResult> PostAutorunScore([FromForm]string alliance, [FromForm]int score)
+    {
+      // Score in this context is 0, 1, 2 or 3, which is the number of robots crossing the line during auto
+      // The scoreboard will calculate with actual score.
+      try
+      {
+        if (Alliance.Parse(alliance).IsRed)
+        {
+          if (_game.ScoreBoard != null)
+          {
+            _game.ScoreBoard.RedAutorunCount = score;
+          }
+        }
+        else
+        {
+          if (_game.ScoreBoard != null)
+          {
+            _game.ScoreBoard.BlueAutorunCount = score;
+          }
+        }
+        return NoContent();
+      }
+      catch
+      {
+        return BadRequest();
+      }      
+    }
+
+    [HttpPost("park")]
+    public async Task<IActionResult> PostParkScore([FromForm]string alliance, [FromForm]int score)
+    {
+      // Score in this context is 0, 1, 2 or 3, which is the number of robots parking on the platform
+      // The scoreboard will calculate with actual score.
+      try
+      {
+        if (Alliance.Parse(alliance).IsRed)
+        {
+          if (_game.ScoreBoard != null)
+          {
+            _game.ScoreBoard.RedParkCount = score;
+          }
+        }
+        else
+        {
+          if (_game.ScoreBoard != null)
+          {
+            _game.ScoreBoard.BlueParkCount = score;
+          }
+        }
+        return NoContent();
+      }
+      catch
+      {
+        return BadRequest();
+      }      
     }
   }
 }
