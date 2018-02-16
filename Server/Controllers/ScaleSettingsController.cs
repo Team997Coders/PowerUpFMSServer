@@ -22,12 +22,14 @@ namespace Server.Controllers
     [HttpGet]
     public async Task<IActionResult> Get()
     {
-      List<DTO.ScaleSettings> dto_ScaleSettings = new List<DTO.ScaleSettings>();
-      if (_fieldSettings.ScaleSettings != null)
+      if (_fieldSettings.ScaleSettings == null)
       {
-        dto_ScaleSettings.Add(ScaleSettingsAssembler.ToDTO(_fieldSettings.ScaleSettings));
+        return NotFound();
       }
-      return Ok(dto_ScaleSettings.ToArray());
+      else
+      {
+        return Ok(ScaleSettingsAssembler.ToDTO(_fieldSettings.ScaleSettings));
+      }
     }
 
     [HttpPost]
