@@ -57,7 +57,51 @@ export class Home extends React.Component<RouteComponentProps<{}>, HomeState> {
       blueTotalSecs:0
     };
     this.serverURL = "http://192.168.1.54:5000";
-    this.fetchParameters = { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded'} };
+    this.fetchParameters = { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Connection': 'close'} };
+    this.eventSource = new EventSource(`${this.serverURL}/api/Game`);
+    let self = this;
+    self.eventSource.onmessage = function(e) {
+      let message = JSON.parse(e.data);
+      if ("ElapsedSeconds" in message)
+      {
+        self.setState({ gameClock: message['ElapsedSeconds'] });
+        return;
+      }
+      if ("BlueOwnershipSeconds" in message)
+      {
+        self.setState({ blueTotalSecs: message['BlueOwnershipSeconds'] });
+        return;
+      }
+      if ("RedOwnershipSeconds" in message)
+      {
+        self.setState({ redTotalSecs: message['RedOwnershipSeconds'] });
+        return;
+      }
+      if ("BlueSwitchOwnershipSeconds" in message)
+      {
+        self.setState({ blueSwitchSecs: message['BlueSwitchOwnershipSeconds'] });
+        return;
+      }
+      if ("BlueScaleOwnershipSeconds" in message)
+      {
+        self.setState({ blueScaleSecs: message['BlueScaleOwnershipSeconds'] });
+        return;
+      }
+      if ("RedSwitchOwnershipSeconds" in message)
+      {
+        self.setState({ redSwitchSecs: message['RedSwitchOwnershipSeconds'] });
+        return;
+      }
+      if ("RedScaleOwnershipSeconds" in message)
+      {
+        self.setState({ redScaleSecs: message['RedScaleOwnershipSeconds'] });
+        return;
+      }
+      if ("EndGame" in message)
+      {
+        self.setState({ playing: false });
+      }
+    }
   }
 
   public render() {
@@ -128,90 +172,56 @@ export class Home extends React.Component<RouteComponentProps<{}>, HomeState> {
   }
 
   fieldOff() {
-    fetch(`${this.serverURL}/api/Field/Off`, this.fetchParameters);
-    this.setState({ reset: false });
+    let self = this;
+    fetch(`${this.serverURL}/api/Field/Off`, this.fetchParameters).then(function(response) {
+      self.setState({ reset: false });
+    });
   }
 
   safe() {
-    fetch(`${this.serverURL}/api/Field/Safe`, this.fetchParameters);
-    this.setState({ reset: false });
+    let self = this;
+    fetch(`${this.serverURL}/api/Field/Safe`, this.fetchParameters).then(function(response) {
+      self.setState({ reset: false });
+    });
   }
 
   staffSafe() {
-    fetch(`${this.serverURL}/api/Field/StaffSafe`, this.fetchParameters);
-    this.setState({ reset: false });
+    let self = this;
+    fetch(`${this.serverURL}/api/Field/StaffSafe`, this.fetchParameters).then(function(response) {
+      self.setState({ reset: false });
+    });
   }
 
   play() {
-    fetch(`${this.serverURL}/api/Game/state/Play`, this.fetchParameters);
-    this.setState({ playing: true });
-    this.setState({ reset: false });
     let self = this;
-    this.eventSource = new EventSource(`${this.serverURL}/api/Game`);
-    this.eventSource.onmessage = function(e) {
-      let message = JSON.parse(e.data);
-      if ("ElapsedSeconds" in message)
-      {
-        self.setState({ gameClock: message['ElapsedSeconds'] });
-        return;
-      }
-      if ("BlueOwnershipSeconds" in message)
-      {
-        self.setState({ blueTotalSecs: message['BlueOwnershipSeconds'] });
-        return;
-      }
-      if ("RedOwnershipSeconds" in message)
-      {
-        self.setState({ redTotalSecs: message['RedOwnershipSeconds'] });
-        return;
-      }
-      if ("BlueSwitchOwnershipSeconds" in message)
-      {
-        self.setState({ blueSwitchSecs: message['BlueSwitchOwnershipSeconds'] });
-        return;
-      }
-      if ("BlueScaleOwnershipSeconds" in message)
-      {
-        self.setState({ blueScaleSecs: message['BlueScaleOwnershipSeconds'] });
-        return;
-      }
-      if ("RedSwitchOwnershipSeconds" in message)
-      {
-        self.setState({ redSwitchSecs: message['RedSwitchOwnershipSeconds'] });
-        return;
-      }
-      if ("RedScaleOwnershipSeconds" in message)
-      {
-        self.setState({ redScaleSecs: message['RedScaleOwnershipSeconds'] });
-        return;
-      }
-      if ("EndGame" in message)
-      {
-        self.eventSource.close();
-        self.setState({ playing: false });
-      }
-    }
+    fetch(`${this.serverURL}/api/Game/state/Play`, this.fetchParameters).then(function(response) {
+      self.setState({ playing: true });
+      self.setState({ reset: false });
+    });
   }
 
   reset() {
-    fetch(`${this.serverURL}/api/Game/state/Reset`, this.fetchParameters);
-    this.setState({ reset: true });
-    this.setState({
-      gameClock: 0,
-      redSwitchSecs: 0,
-      redScaleSecs: 0,
-      redTotalSecs: 0,
-      blueSwitchSecs: 0,
-      blueScaleSecs: 0,
-      blueTotalSecs:0      
+    let self = this;
+    fetch(`${this.serverURL}/api/Game/state/Reset`, this.fetchParameters).then(function(response) {
+      self.setState({ reset: true });
+      self.setState({
+        gameClock: 0,
+        redSwitchSecs: 0,
+        redScaleSecs: 0,
+        redTotalSecs: 0,
+        blueSwitchSecs: 0,
+        blueScaleSecs: 0,
+        blueTotalSecs:0      
+      });
     });
   }
 
   fault() {
-    this.eventSource.close();
+    // this.eventSource.close();
     fetch(`${this.serverURL}/api/Game/state/Fault`, this.fetchParameters)
+      .then(function(response) { })
       .catch(error => console.log(error));
-    this.setState({ playing: false });
+    // this.setState({ playing: false });
   }
 
   urlEncodeBody(data: { [key: string]: string }) : string {
@@ -228,13 +238,14 @@ export class Home extends React.Component<RouteComponentProps<{}>, HomeState> {
       cache: 'no-cache', // *default, cache, reload, force-cache, only-if-cached
       credentials: 'same-origin', // include, *omit
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Connection': 'close'
       },
       method: 'POST', // *GET, PUT, DELETE, etc.
       mode: 'cors', // no-cors, *same-origin
       redirect: 'follow', // *manual, error
       referrer: 'no-referrer', // *client
     })
-    .then(response => response) // simply returns the response
+    .then(response => response.toString()) // simply returns the response
   }  
 }

@@ -76,6 +76,9 @@ export class Game extends React.Component<{}, GameState> {
       blueClimbScore: 0,
       playFile: ""
     };
+  }
+
+  componentWillMount() {
     let self = this;
     this.eventSource = new EventSource(`${this.serverURL}/api/Game`);
     this.eventSource.onmessage = function(e) {
@@ -199,6 +202,10 @@ export class Game extends React.Component<{}, GameState> {
         return;
       }
     }
+  }
+
+  componentWillUnmount() {
+    this.eventSource.close();
   }
 
   public render() {

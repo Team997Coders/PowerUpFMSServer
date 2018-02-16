@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace Server.Controllers
 {
@@ -17,13 +18,15 @@ namespace Server.Controllers
     private readonly Game _game;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private HttpResponse _response;
+    private readonly ILogger _logger;
 
-    public GameController(Game game, GameSettings gameSettings, FieldSettings fieldSettings, IHttpContextAccessor httpContextAccessor)
+    public GameController(Game game, GameSettings gameSettings, FieldSettings fieldSettings, IHttpContextAccessor httpContextAccessor, ILogger<GameController> logger)
     {
       _fieldSettings = fieldSettings;
       _gameSettings = gameSettings;
       _game = game;
       _httpContextAccessor = httpContextAccessor;
+      _logger = logger;
     }
 
     [HttpGet("state")]
@@ -41,6 +44,7 @@ namespace Server.Controllers
       // we are streaming messages...
       _response.Headers.Add("Content-Type", "text/event-stream");
 
+while(true) {
       if (_game.IsPlaying)
       {
         // TODO: For now, clear these values out manually...timing problems with client need to be fixed
@@ -78,8 +82,17 @@ namespace Server.Controllers
         _game.ScoreBoard.StateOfPlayUpdated += OnStateOfPlayUpdated;
 
         // wait until the game is done
-        SpinWait.SpinUntil(() => !_game.IsPlaying);
+        Task playingMonitor = new Task(() =>
+          {
+            while(_game.IsPlaying) {
+              Thread.Sleep(200);
+            };
+          }
+        );
+        playingMonitor.Start();
+        await playingMonitor;
 
+        // Write the endgame message so client knows we are done...
         _response.WriteAsync($"data: {{\"EndGame\": 1}}\r\r").Wait();
         _response.Body.Flush();
 
@@ -100,9 +113,7 @@ namespace Server.Controllers
         _game.ScoreBoard.RedClimbScoreUpdated -= OnRedClimbScoreUpdated;
         _game.ScoreBoard.StateOfPlayUpdated -= OnStateOfPlayUpdated;
       }
-      else
-      {
-        return;
+await Task.Delay(500);
       }
     }
 

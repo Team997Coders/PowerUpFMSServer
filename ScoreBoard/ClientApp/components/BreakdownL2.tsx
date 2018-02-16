@@ -23,10 +23,10 @@ export class BreakdownL2 extends React.Component<BreakdownL2Props, {}> {
 
     return <div>
       <div className='col-md-2' style={styles}>
-        V: {this.props.vault}
+        VT:  {this.props.vault}
       </div>
       <div className='col-md-2' style={styles}>
-        P: {this.props.park}
+        PK:  {this.props.park}
       </div>
       <div className='col-md-2' style={styles}>
         AR: {this.props.autorun}

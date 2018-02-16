@@ -14,8 +14,8 @@ export class TotalScore extends React.Component<TotalScoreProps, {}> {
   public render() {
     var styles = {
       color: this.props.alliance,
-      fontSize: 190,
-      lineHeight: '1.25em',
+      fontSize: 210,
+      lineHeight: '1.50em',
       fontFamily: "'Press Start 2P'",
     }
 
