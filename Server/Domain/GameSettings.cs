@@ -8,7 +8,7 @@ namespace Server.Domain
     private static readonly object _padlock = new Object();
     private static volatile GameSettings _instance = null;
     // Default settings on newly installed driver station
-    private GameSettings () : this(3, 5, 15, 1, 135, 30) { }
+    private GameSettings () : this(5, 5, 15, 1, 135, 30) { }
 
     public static GameSettings Instance
     {

@@ -39,7 +39,7 @@ export class Sound extends React.Component<SoundProps, SoundState> {
     }
   }
 
-  play() {
+  public play() {
     if (this.audioControl) {
       this.audioControl.play()
         .then(_ => {

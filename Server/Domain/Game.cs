@@ -12,6 +12,7 @@ namespace Server.Domain
     private static volatile Game _instance = null;
     private Game ()
     {
+      _scoreBoard = new ScoreBoard();
       _gameTimer = new Timer(new TimerCallback(OnGameQuantum), null, Timeout.Infinite, Timeout.Infinite);
       _driverCountdownTimer = new Timer(new TimerCallback(OnDriverCountdown), null, Timeout.Infinite, Timeout.Infinite);
       _autonomousCountdownTimer = new Timer(new TimerCallback(OnAutonomousCountdown), null, Timeout.Infinite, Timeout.Infinite);
@@ -357,6 +358,7 @@ namespace Server.Domain
       BlueSwitchOwnershipDeciseconds = 0;
       BlueScaleOwnershipDeciseconds = 0;
       ElapsedDeciseconds = 0;
+      ScoreBoard.Clear();
     }
 
     private void OnRedAllianceOwnsRedSwitch(object sender, EventArgs e)
@@ -595,11 +597,10 @@ namespace Server.Domain
     }
 
 
-    public async Task Reset(FieldSettings fieldSettings, ScoreBoard scoreBoard)
+    public async Task Reset(FieldSettings fieldSettings)
     {
       if (GameState == GameStateEnum.PLAYING)
         throw new InvalidOperationException("Cannot reset game while playing in process.");
-      _scoreBoard = scoreBoard;
       ZeroScore();
       GameState = GameStateEnum.RESET;
       Field fieldToRandomize = new Field(fieldSettings);

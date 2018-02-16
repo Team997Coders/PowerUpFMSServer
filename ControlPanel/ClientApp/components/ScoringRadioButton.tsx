@@ -13,8 +13,9 @@ interface ScoringRadioButtonProps {
   alliance: string;
   name: string
   callbackParent: ICallback;
-  disabled: boolean
-  maximumScore: number
+  disabled: boolean;
+  zero: boolean;
+  maximumScore: number;
 }
 
 export class ScoringRadioButton extends React.Component<ScoringRadioButtonProps, ScoringRadioButtonState> {
@@ -35,7 +36,7 @@ export class ScoringRadioButton extends React.Component<ScoringRadioButtonProps,
 
   componentWillReceiveProps(nextProps: ScoringRadioButtonProps)
   {
-    if (this.props.disabled != nextProps.disabled && nextProps.disabled == false)
+    if (this.props.zero != nextProps.zero && nextProps.zero == true)
     {
       this.setState({ score: 0 });
     }

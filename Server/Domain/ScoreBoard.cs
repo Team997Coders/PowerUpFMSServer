@@ -253,6 +253,23 @@ namespace Server.Domain
       }
     }
 
+    public void Clear()
+    {
+      ElapsedDeciseconds = 0;
+      BlueAutorunCount = 0;
+      BlueVaultCount = 0;
+      BlueParkCount = 0;
+      BlueClimbCount = 0;
+      BlueSwitchOwnershipDeciseconds = 0;
+      BlueScaleOwnershipDeciseconds = 0;
+      RedAutorunCount = 0;
+      RedVaultCount = 0;
+      RedParkCount = 0;
+      RedClimbCount = 0;
+      RedSwitchOwnershipDeciseconds = 0;
+      RedScaleOwnershipDeciseconds = 0;
+    }
+
     private int CalculateVaultScore(int count)
     {
       return count * 5;

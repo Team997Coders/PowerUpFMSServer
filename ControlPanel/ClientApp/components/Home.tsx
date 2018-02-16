@@ -116,17 +116,17 @@ export class Home extends React.Component<RouteComponentProps<{}>, HomeState> {
         <button disabled={!this.state.playing} onClick={ () => { this.fault() } }>Fault</button>
         <h1>Game Scoring</h1>
         <h2>Auto-Run</h2>
-        <ScoringRadioButton alliance="Red" name="redautorun" disabled={!this.state.playing} maximumScore={3} callbackParent={s => this.onRedAutoRunScoreChanged(s)}/>
-        <ScoringRadioButton alliance="Blue" name="blueautorun" disabled={!this.state.playing} maximumScore={3} callbackParent={s => this.onBlueAutoRunScoreChanged(s)}/>
+        <ScoringRadioButton alliance="Red" name="redautorun" zero={this.state.reset} disabled={false} maximumScore={3} callbackParent={s => this.onRedAutoRunScoreChanged(s)}/>
+        <ScoringRadioButton alliance="Blue" name="blueautorun" zero={this.state.reset} disabled={false} maximumScore={3} callbackParent={s => this.onBlueAutoRunScoreChanged(s)}/>
         <h2>Vault</h2>
-        <ScoringRadioButton alliance="Red" name="redvault" disabled={!this.state.playing} maximumScore={9} callbackParent={s => this.onRedVaultScoreChanged(s)}/>
-        <ScoringRadioButton alliance="Blue" name="bluevault" disabled={!this.state.playing} maximumScore={9} callbackParent={s => this.onBlueVaultScoreChanged(s)}/>
+        <ScoringRadioButton alliance="Red" name="redvault" zero={this.state.reset} disabled={false} maximumScore={9} callbackParent={s => this.onRedVaultScoreChanged(s)}/>
+        <ScoringRadioButton alliance="Blue" name="bluevault" zero={this.state.reset} disabled={false} maximumScore={9} callbackParent={s => this.onBlueVaultScoreChanged(s)}/>
         <h2>Park</h2>
-        <ScoringRadioButton alliance="Red" name="redpark" disabled={!this.state.playing} maximumScore={3} callbackParent={s => this.onRedParkScoreChanged(s)}/>
-        <ScoringRadioButton alliance="Blue" name="bluepark" disabled={!this.state.playing} maximumScore={3} callbackParent={s => this.onBlueParkScoreChanged(s)}/>
+        <ScoringRadioButton alliance="Red" name="redpark" zero={this.state.reset} disabled={false} maximumScore={3} callbackParent={s => this.onRedParkScoreChanged(s)}/>
+        <ScoringRadioButton alliance="Blue" name="bluepark" zero={this.state.reset} disabled={false} maximumScore={3} callbackParent={s => this.onBlueParkScoreChanged(s)}/>
         <h2>Climb</h2>
-        <ScoringRadioButton alliance="Red" name="redclimb" disabled={!this.state.playing} maximumScore={3} callbackParent={s => this.onRedClimbScoreChanged(s)}/>
-        <ScoringRadioButton alliance="Blue" name="blueclimb" disabled={!this.state.playing} maximumScore={3} callbackParent={s => this.onBlueClimbScoreChanged(s)}/>
+        <ScoringRadioButton alliance="Red" name="redclimb" zero={this.state.reset} disabled={false} maximumScore={3} callbackParent={s => this.onRedClimbScoreChanged(s)}/>
+        <ScoringRadioButton alliance="Blue" name="blueclimb" zero={this.state.reset} disabled={false} maximumScore={3} callbackParent={s => this.onBlueClimbScoreChanged(s)}/>
         <h1>Game Status</h1>
         {this.state.playing && <p><strong>PLAYING</strong></p>}
         <p>Game clock: <strong>{ this.state.gameClock }</strong></p>
