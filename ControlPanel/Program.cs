@@ -20,7 +20,7 @@ namespace ControlPanel
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseUrls("http://*:5080")
-                .UseEnvironment("Development")
+//                .UseEnvironment("Development")
                 .UseStartup<Startup>()
                 .Build();
     }
