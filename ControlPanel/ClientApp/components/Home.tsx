@@ -108,8 +108,8 @@ export class Home extends React.Component<RouteComponentProps<{}>, HomeState> {
       return <div>
         <h1>Field Control</h1>
         <button disabled={this.state.playing} onClick={ () => { this.fieldOff() } }>Off</button>
-        <button disabled={this.state.playing} onClick={ () => { this.safe() } }>Safe</button>
         <button disabled={this.state.playing} onClick={ () => { this.staffSafe() } }>Staff Safe</button>
+        <button disabled={this.state.playing} onClick={ () => { this.safe() } }>Safe</button>
         <h1>Game Control</h1>
         <button disabled={this.state.playing} onClick={ () => { this.reset() } }>Reset</button>
         <button disabled={this.state.playing || !this.state.reset} onClick={ () => { this.play() } }>Play</button>
