@@ -58,7 +58,8 @@ export class Game extends React.Component<GameProps, {}> {
     {
       playFile = "/audio/fault.mp3";
     }
-
+    // #4169E1 -orig 
+    // #448CFF - good on black
     return <div>
       <div className='row'>
         <div className='col-md-12 text-center'>
@@ -70,16 +71,16 @@ export class Game extends React.Component<GameProps, {}> {
           <TotalScore alliance='red' score={this.props.redTotalSecs} />
         </div>
         <div className='col-md-6 text-center'>
-          <TotalScore alliance='#4169E1' score={this.props.blueTotalSecs}/>
+          <TotalScore alliance='#448CFF' score={this.props.blueTotalSecs}/>
         </div>
       </div>
       <div className='row'>
         <BreakdownL1 alliance='red' switch={this.props.redSwitchSecs} scale={this.props.redScaleSecs} climb={this.props.redClimbScore} />
-        <BreakdownL1 alliance='#4169E1' switch={this.props.blueSwitchSecs} scale={this.props.blueScaleSecs} climb={this.props.blueClimbScore} />
+        <BreakdownL1 alliance='#448CFF' switch={this.props.blueSwitchSecs} scale={this.props.blueScaleSecs} climb={this.props.blueClimbScore} />
       </div>
       <div className='row'>
         <BreakdownL2 alliance='red' vault={this.props.redVaultScore} park={this.props.redParkScore} autorun={this.props.redAutorunScore} />
-        <BreakdownL2 alliance='#4169E1' vault={this.props.blueVaultScore} park={this.props.blueParkScore} autorun={this.props.blueAutorunScore} />
+        <BreakdownL2 alliance='#448CFF' vault={this.props.blueVaultScore} park={this.props.blueParkScore} autorun={this.props.blueAutorunScore} />
       </div>
       <Sound url={playFile} type="audio/mpeg" />
     </div>

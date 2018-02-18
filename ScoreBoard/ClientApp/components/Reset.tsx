@@ -13,7 +13,7 @@ export class Reset extends React.Component<ResetProps, {}> {
   public render() {
     var styles = {
       color: "white",
-      fontSize: 160,
+      fontSize: 120,
       textAlign: "center",
       fontFamily: "'Press Start 2P'"
     }

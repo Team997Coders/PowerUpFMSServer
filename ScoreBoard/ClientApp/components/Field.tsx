@@ -15,7 +15,7 @@ export class Field extends React.Component<FieldProps, {}> {
   public render() {
     var styles = {
       color: "yellow",
-      fontSize: 240,
+      fontSize: 180,
       textAlign: "center",
       fontFamily: "'Press Start 2P'"
     }
