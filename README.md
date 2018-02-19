@@ -29,3 +29,5 @@ You will need to search for and replace IP address 192.168.1.54 with the IP addr
 Here is a doc that describes how game play works using this scoring system: https://docs.google.com/document/d/1u-EGgbDC8yMkxl0OnWY633JzEyF7c2hVuC16VZJAThY/edit?usp=sharing
 
 To run the scoreboard, we used a Raspberry Pi 3 autoloading Chrome into full screen.  Since we had access to the FIRST A/V setup, we were able to overlay the scoreboard on to live video feeds from the field.  It looked great!
+
+Pi https://www.amazon.com/gp/product/B0778CZ97B/ref=oh_aui_detailpage_o04_s00?ie=UTF8&psc=1  
