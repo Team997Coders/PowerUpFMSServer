@@ -27,3 +27,5 @@ If the projects build sucessfully, you can run dotnet run for each project.
 You will need to search for and replace IP address 192.168.1.54 with the IP address of your machine which will run the server application.  I have not brought this constant out into app settings yet.
 
 Here is a doc that describes how game play works using this scoring system: https://docs.google.com/document/d/1u-EGgbDC8yMkxl0OnWY633JzEyF7c2hVuC16VZJAThY/edit?usp=sharing
+
+To run the scoreboard, we used a Raspberry Pi 3 autoloading Chrome into full screen.  Since we had access to the FIRST A/V setup, we were able to overlay the scoreboard on to live video feeds from the field.  It looked great!
