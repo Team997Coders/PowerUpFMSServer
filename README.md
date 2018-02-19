@@ -7,6 +7,7 @@ It has the following features:
 - Sets field state for safe and staff-safe conditions.
 - Maintains a scoreboard.
 - Enables scoring for autorun, vault cube count, climbs and parks.  Does not contain scoring for power ups.
+- Plays the sounds from the driver station during game stages so the drivers can tell where they are within the game.
 - Shows a status page of adruino control modules that control field lights and detect plate state.
 
 It is in 5 parts...three of which are in this repo.
