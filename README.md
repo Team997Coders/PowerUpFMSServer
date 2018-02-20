@@ -33,3 +33,6 @@ Here is a doc that describes how game play works using this scoring system: http
 To run the scoreboard, we used a Raspberry Pi 3 autoloading Chrome into full screen.  Since we had access to the FIRST A/V setup, we were able to overlay the scoreboard on to live video feeds from the field.  It looked great!
 
 Pi https://www.amazon.com/gp/product/B0778CZ97B/ref=oh_aui_detailpage_o04_s00?ie=UTF8&psc=1  
+
+![Scoreboard Screenshot](Scoreboard.png)  
+![Field Control Panel Screenshot](ControlPanel.png)
